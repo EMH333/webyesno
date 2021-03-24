@@ -1,0 +1,29 @@
+{
+  "name": "webyesno",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "buildp": "node build.js clean",
+    "serve": "node build.js serve",
+    "checkts": "typescript --noEmit"
+  },
+  "author": "Ethan Hampton",
+  "license": "ISC",
+  "browserslist": [
+    "last 1 firefox version"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.9.6",
+    "esbuild-svelte": "^0.4.3",
+    "svelte-preprocess": "^4.6.9",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "@shoelace-style/shoelace": "^2.0.0-beta.34",
+    "cookiesjs": "^3.0.3",
+    "wretch": "^1.7.4"
+  }
+}
