@@ -66,20 +66,40 @@
   </sl-alert>
 {/if}
 
-{#if showingResults}
-  <h1 class="results">{resultAnswer}</h1>
-  <sl-progress-bar
-    percentage={resultPercent}
-    class="results"
-    style="--height: 3rem;">{resultVoteCount}</sl-progress-bar
-  >
-{:else}
-  <sl-button on:click={vote("yes")} disabled={loading}>Yes</sl-button>
-  <sl-button on:click={vote("no")} disabled={loading}>No</sl-button>
-  <sl-button on:click={results} {loading}>See Results</sl-button>
-{/if}
+<div class="overall">
+  {#if showingResults}
+    <div class="results">
+      <h1>{resultAnswer}</h1>
+      <sl-progress-bar
+        percentage={resultPercent}
+        style="--height: 3rem; --indicator-color: var(--sl-color-{resultAnswer ==
+        'YES'
+          ? 'success'
+          : 'danger'}-500)">{resultVoteCount} votes</sl-progress-bar
+      >
+    </div>
+  {:else}
+    <sl-button on:click={vote("yes")} disabled={loading}>Yes</sl-button>
+    <br />
+    <sl-button on:click={vote("no")} disabled={loading}>No</sl-button>
+    <br />
+    <sl-button on:click={results} {loading}>See Results</sl-button>
+  {/if}
+</div>
 
 <!-- markup (zero or more items) goes here -->
 <style>
   /* your styles go here */
+  .overall {
+    margin: auto;
+    text-align: center;
+    display: block;
+  }
+  sl-button {
+    margin-top: 0.5em;
+  }
+  .results {
+    max-width: 80rem;
+    margin: auto;
+  }
 </style>
