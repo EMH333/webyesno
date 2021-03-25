@@ -108,7 +108,12 @@ fun Application.myRouting() {
                     return@post
                 }
             }
-            call.response.cookies.append(name = "submitted", value = true.toString(), expires = GMTDate().plus(Duration.ofDays(1).toMillis()))
+            call.response.cookies.append(
+                name = "submitted",
+                value = true.toString(),
+                expires = GMTDate().plus(Duration.ofDays(1).toMillis()),
+                extensions = mapOf(Pair("SameSite", "Strict"))
+                )
             call.respondText("OK")
         }
     }

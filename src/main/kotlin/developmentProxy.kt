@@ -18,8 +18,9 @@ internal fun applyDevelopmentRouting(routing: Routing) {
         var target = call.request.uri.replaceAfter("?","").replace("?","")
         if (!target.endsWith(".js") &&
             !target.endsWith(".css") &&
-            //!target.endsWith(".html") &&
+            !target.endsWith(".html") &&
             !target.endsWith(".map") &&
+            !target.endsWith(".svg") && //for assets
             target != "/"
         ) {
             println("not proxying $target")
