@@ -1,4 +1,5 @@
-import java.util.*
+package com.ethohampton.yesno
+
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 

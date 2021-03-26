@@ -1,3 +1,5 @@
+package com.ethohampton.yesno
+
 import io.ktor.application.*
 import io.ktor.client.request.*
 import io.ktor.features.*
@@ -13,15 +15,13 @@ import io.ktor.util.date.*
 import io.ktor.util.pipeline.*
 import java.net.Inet6Address
 import java.time.Duration
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.timer
 
 var devMode: Boolean = false
 fun main() {
     val server = embeddedServer(
         Netty,
         port = 8000,
-        module = Application::myRouting
+        module = Application::myRouting,
     )
     server.start(wait = false)//note that the server will keep program running forever even if wait is false
 }
@@ -56,16 +56,7 @@ fun Application.myRouting() {
             devMode = true
         }
 
-        //intercept(HttpRequestPipeline.State) {
-        //    call.response.cookies.append("ticket", cookieValue) // always update cookie header
-        //}
-
-        static("/") {
-            defaultResource("dist/index.html")
-            if (!devMode) {
-                resources("dist")
-            }
-        }
+        //trace { application.log.info(it.buildText()) }
 
         get("/result") {
             if (devMode) {
@@ -100,8 +91,15 @@ fun Application.myRouting() {
                 value = true.toString(),
                 expires = GMTDate().plus(Duration.ofDays(1).toMillis()),
                 extensions = mapOf(Pair("SameSite", "Strict"))
-                )
+            )
             call.respondText("OK")
+        }
+
+        static("/") {
+            defaultResource("dist/index.html")
+            if (!devMode) {
+                resources("dist")
+            }
         }
     }
 }

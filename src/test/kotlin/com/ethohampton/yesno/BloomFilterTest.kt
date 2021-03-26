@@ -1,3 +1,6 @@
+package com.ethohampton.yesno
+
+import com.ethohampton.yesno.BloomFilter
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
