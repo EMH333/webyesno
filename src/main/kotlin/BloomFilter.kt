@@ -1,7 +1,7 @@
 import java.util.*
 import kotlin.math.roundToInt
 
-class BloomFilter constructor(n: Int, m: Int = 1024 * 1024 * 8) : Cloneable {
+class BloomFilter constructor(expectedElements: Int, size: Int = 1024 * 1024 * 8) : Cloneable {
     private val hashes: BitSet
     private val prng: RandomInRange
     private var k: Int // Number of hash functions
@@ -122,17 +122,17 @@ class BloomFilter constructor(n: Int, m: Int = 1024 * 1024 * 8) : Cloneable {
     }
     /**
      * Create a new bloom filter.
-     * @param n Expected number of elements
-     * @param m Desired size of the container in bits
+     * @param expectedElements Expected number of elements
+     * @param size Desired size of the container in bits
      */
     /**
      * Create a bloom filter of 1Mib.
      * @param n Expected number of elements
      */
     init {
-        k = (LN2 * m / n).roundToInt()
+        k = (LN2 * size / expectedElements).roundToInt()
         if (k <= 0) k = 1
-        hashes = BitSet(m)
-        prng = RandomInRange(m, k)
+        hashes = BitSet(size)
+        prng = RandomInRange(size, k)
     }
 }

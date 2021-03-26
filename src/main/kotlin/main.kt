@@ -16,27 +16,14 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.timer
 
-var cookieValue: String = ""
-var pastCookieValue: String = ""
 var devMode: Boolean = false
 fun main() {
-    timer(name = "updateCookie", period = TimeUnit.HOURS.toMillis(1)) {
-        pastCookieValue = cookieValue
-        cookieValue = getRandomString(10)
-    }
     val server = embeddedServer(
         Netty,
         port = 8000,
         module = Application::myRouting
     )
     server.start(wait = false)//note that the server will keep program running forever even if wait is false
-}
-
-fun getRandomString(length: Int): String {
-    val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-    return (1..length)
-        .map { allowedChars.random() }
-        .joinToString("")
 }
 
 fun Application.myRouting() {
