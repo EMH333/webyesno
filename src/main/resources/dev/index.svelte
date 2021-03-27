@@ -5,6 +5,7 @@
   import "@shoelace-style/shoelace/dist/components/progress-bar/progress-bar.js";
   import "@shoelace-style/shoelace/dist/components/alert/alert.js";
   import "@shoelace-style/shoelace/dist/components/icon/icon.js";
+  import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
   import wretch from "wretch";
   import cookies from "cookiesjs";
   import { onMount } from "svelte";

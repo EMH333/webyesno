@@ -21,6 +21,9 @@ function copyShoelaceAssets() {
   fs.copyFile('./node_modules/@shoelace-style/shoelace/dist/assets/icons/exclamation-octagon.svg', './dist/shoelace/assets/icons/exclamation-octagon.svg', (err) => {
     if (err) throw err;
   });
+  fs.copyFile('./node_modules/@shoelace-style/shoelace/dist/assets/icons/x.svg', './dist/shoelace/assets/icons/x.svg', (err) => {
+    if (err) throw err;
+  });
 }
 
 if (process.argv.length >= 2 && (process.argv[2] === "clean" || process.argv[2] === "production")) {
