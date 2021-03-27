@@ -8,8 +8,8 @@ import io.ktor.http.content.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.cio.*
 import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.util.*
 import io.ktor.util.date.*
 import io.ktor.util.pipeline.*
@@ -19,11 +19,11 @@ import java.time.Duration
 var devMode: Boolean = false
 fun main() {
     val server = embeddedServer(
-        Netty,
+        CIO,
         port = 8000,
         module = Application::myRouting,
     )
-    server.start(wait = false)//note that the server will keep program running forever even if wait is false
+    server.start(wait = true)
 }
 
 fun Application.myRouting() {
@@ -96,8 +96,13 @@ fun Application.myRouting() {
         }
 
         static("/") {
+            //install(Compression)
             defaultResource("dist/index.html")
             if (!devMode) {
+                //seems it can't serve precompressed resources
+                //preCompressed(CompressedFileType.BROTLI, CompressedFileType.GZIP) {
+                //    resources("dist/precompressed")
+                //}
                 resources("dist")
             }
         }

@@ -1,7 +1,12 @@
 const esbuild = require('esbuild');
 const esbuildOptions = require('./esbuild.config');
 const fs = require('fs');
-var path = require('path');
+const { createGzip, createBrotliCompress, constants } = require('zlib');
+const { pipeline } = require('stream');
+const {
+  createReadStream,
+  createWriteStream
+} = require('fs');
 
 function copyHTML() {
   fs.copyFile('./dev/index.html', './dist/index.html', (err) => {
@@ -9,7 +14,7 @@ function copyHTML() {
   });
 }
 
-function copyShoelaceAssets(){
+function copyShoelaceAssets() {
   if (!fs.existsSync("./dist/shoelace/assets/icons")) {
     fs.mkdirSync("./dist/shoelace/assets/icons", { recursive: true });
   }
@@ -18,7 +23,7 @@ function copyShoelaceAssets(){
   });
 }
 
-if (process.argv.length >= 2 && process.argv[2] === "clean") {
+if (process.argv.length >= 2 && (process.argv[2] === "clean" || process.argv[2] === "production")) {
   const directory = './dist';
 
   if (fs.existsSync(directory)) {
@@ -45,46 +50,50 @@ if (process.argv.length >= 2 && process.argv[2] === "serve") {
   })
 } else {
   //TODO fix directory structure
-  esbuild.build(esbuildOptions).catch(() => process.exit(1))
+  esbuild.build(esbuildOptions).then(() => {
+    if (process.argv.length >= 2 && process.argv[2] === "production") {
+      compressJSandCSS();
+    }
+  }).catch(() => process.exit(1))
   copyHTML();
   copyShoelaceAssets();
 }
 
-
-
-function copyFileSync( source, target ) {
-
-  var targetFile = target;
-
-  // If target is a directory, a new file with the same name will be created
-  if ( fs.existsSync( target ) ) {
-      if ( fs.lstatSync( target ).isDirectory() ) {
-          targetFile = path.join( target, path.basename( source ) );
-      }
+function compressJSandCSS() {
+  if (!fs.existsSync("./dist/precompressed")) {
+    fs.mkdirSync("./dist/precompressed", { recursive: true });
   }
 
-  fs.writeFileSync(targetFile, fs.readFileSync(source));
+  const gzip = createGzip({ level: constants.Z_MAX_LEVEL });
+  const brotli = createBrotliCompress({
+    params: {
+      [constants.BROTLI_PARAM_QUALITY]: constants.BROTLI_MAX_QUALITY,
+    }
+  });
+
+
+  compressFile('./dist/index.js', './dist/precompressed/index.js.gz', gzip);
+  compressFile('./dist/index.js', './dist/precompressed/index.js.br', brotli);
+
+  const gzip2 = createGzip({ level: constants.Z_MAX_LEVEL });
+  const brotli2 = createBrotliCompress({
+    params: {
+      [constants.BROTLI_PARAM_QUALITY]: constants.BROTLI_MAX_QUALITY,
+    }
+  });
+
+  compressFile('./dist/index.css', './dist/precompressed/index.css.gz', gzip2);
+  compressFile('./dist/index.css', './dist/precompressed/index.css.br', brotli2);
+
 }
 
-function copyFolderRecursiveSync( source, target ) {
-  var files = [];
-
-  // Check if folder needs to be created or integrated
-  var targetFolder = path.join( target, path.basename( source ) );
-  if ( !fs.existsSync( targetFolder ) ) {
-      fs.mkdirSync( targetFolder );
-  }
-
-  // Copy
-  if ( fs.lstatSync( source ).isDirectory() ) {
-      files = fs.readdirSync( source );
-      files.forEach( function ( file ) {
-          var curSource = path.join( source, file );
-          if ( fs.lstatSync( curSource ).isDirectory() ) {
-              copyFolderRecursiveSync( curSource, targetFolder );
-          } else {
-              copyFileSync( curSource, targetFolder );
-          }
-      } );
-  }
+function compressFile(input, output, type){
+  let source = createReadStream(input);
+  let destination = createWriteStream(output);
+  pipeline(source, type, destination, (err) => {
+    if (err) {
+      console.error('An error occurred:', err);
+      process.exitCode = 1;
+    }
+  });
 }

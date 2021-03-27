@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "node build.js",
-    "buildp": "node build.js clean",
+    "buildp": "node build.js production",
     "serve": "node build.js serve",
     "checkts": "typescript --noEmit"
   },
