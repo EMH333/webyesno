@@ -2,11 +2,11 @@ const esbuildSvelte = require('esbuild-svelte');
 const svelteConfig = require('./svelte.config');
 
 module.exports = {
-    entryPoints: ['./dev/index.js', ],
+    entryPoints: ['./dev/index.ts', './dev/login/login.ts'],
     format: 'esm',
     minify: true,
     bundle: true,
-    splitting: false,//off because of https://github.com/evanw/esbuild/issues/608
+    splitting: true,
     outdir: './dist',
     sourcemap: 'external',
     plugins: [esbuildSvelte({

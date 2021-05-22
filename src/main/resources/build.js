@@ -12,6 +12,9 @@ function copyHTML() {
   fs.copyFile('./dev/index.html', './dist/index.html', (err) => {
     if (err) throw err;
   });
+  fs.copyFile('./dev/login/login.html', './dist/login.html', (err) => {
+    if (err) throw err;
+  });
 }
 
 function copyShoelaceAssets() {
