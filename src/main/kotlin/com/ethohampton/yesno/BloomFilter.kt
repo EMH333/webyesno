@@ -129,7 +129,7 @@ class BloomFilter constructor(expectedElements: Int, size: Int = 1024 * 1024 * 8
      */
     /**
      * Create a bloom filter of 1Mib.
-     * @param n Expected number of elements
+     * @param expectedElements Expected number of elements
      */
     init {
         k = (LN2 * size / expectedElements).roundToInt()
