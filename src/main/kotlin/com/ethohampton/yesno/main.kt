@@ -1,6 +1,8 @@
 package com.ethohampton.yesno
 
+import com.ethohampton.yesno.login.applyLoginToApplication
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.client.request.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -15,6 +17,7 @@ import io.ktor.util.date.*
 import io.ktor.util.pipeline.*
 import java.net.Inet6Address
 import java.time.Duration
+import java.util.*
 
 var devMode: Boolean = false
 fun main() {
@@ -27,6 +30,8 @@ fun main() {
 }
 
 fun Application.myRouting() {
+    applyLoginToApplication(this)
+
     routing {
         install(CachingHeaders) {
             options { outgoingContent ->
@@ -74,7 +79,7 @@ fun Application.myRouting() {
                 return@post
             }
 
-            when (call.receiveText().toLowerCase()) {
+            when (call.receiveText().lowercase(Locale.getDefault())) {
                 "yes" -> {
                     Counter.addYes(call.getLikelyIP())
                 }

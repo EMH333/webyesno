@@ -1,6 +1,6 @@
 <script lang="ts">
   import "@shoelace-style/shoelace/dist/themes/base.css";
-  import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
+  import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path.js";
   import "@shoelace-style/shoelace/dist/components/button/button.js";
   import "@shoelace-style/shoelace/dist/components/progress-bar/progress-bar.js";
   import "@shoelace-style/shoelace/dist/components/alert/alert.js";
@@ -9,6 +9,8 @@
   import wretch from "wretch";
   import cookies from "cookiesjs";
   import { onMount } from "svelte";
+
+  import LoginWidget from "./login/loginWidget.svelte";
 
   let showingResults = false;
   let resultPercent = 0;
@@ -70,11 +72,13 @@
   });
 </script>
 
-  <sl-alert type="danger" duration="5000" closable bind:this={errorToast}>
-    <sl-icon slot="icon" name="exclamation-octagon" />
-    <strong>There was an error</strong><br />
-    There seems to be an issue, try again later
-  </sl-alert>
+<sl-alert type="danger" duration="5000" closable bind:this={errorToast}>
+  <sl-icon slot="icon" name="exclamation-octagon" />
+  <strong>There was an error</strong><br />
+  There seems to be an issue, try again later
+</sl-alert>
+
+<LoginWidget />
 
 <div class="overall">
   {#if showingResults}
